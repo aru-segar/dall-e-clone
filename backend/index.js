@@ -1,33 +1,33 @@
-import express from "express"; // import tools
-import * as dotenv from "dotenv";
-import cors from "cors";
-import connectDB from "./mongodb/connect.js";
-import postRoutes from "./routes/postRoutes.js";
-import dalleRoutes from "./routes/dalleRoutes.js";
+import express from 'express';
+import * as dotenv from 'dotenv';
+import cors from 'cors';
 
-dotenv.config(); // load .env file
+import connectDB from './mongodb/connect.js';
+import postRoutes from './routes/postRoutes.js';
+import dalleRoutes from './routes/dalleRoutes.js';
 
-const app = express(); // create express app
-app.use(cors()); // enable CORS
-app.use(express.json({ limit: "50mb" })); // enable JSON body parsing
+dotenv.config();
 
-app.use("/api/v1/post", postRoutes); // use post routes
-app.use("/api/v1/dalle", dalleRoutes); // use dalle routes
+const app = express();
+app.use(cors());
+app.use(express.json({ limit: '50mb' }));
 
-app.get("/", async (req, res) => {
-  // define a route handler for the default home page
-  res.send("Hello World!"); // send a response to the client
+app.use('/api/v1/post', postRoutes);
+app.use('/api/v1/dalle', dalleRoutes);
+
+app.get('/', async (req, res) => {
+  res.status(200).json({
+    message: 'Hello from DALL.E!',
+  });
 });
 
 const startServer = async () => {
   try {
-    connectDB(process.env.MONGODB_URL); // connect to MongoDB
-    app.listen(8000, () =>
-      console.log("Server is running on http://localhost:8000")
-    );
-  } catch (err) {
-    console.log(err);
+    connectDB(process.env.MONGODB_URL);
+    app.listen(8080, () => console.log('Server started at http://localhost:8080'));
+} catch (error) {
+    console.log(error);
   }
 };
 
-startServer(); // start the server
+startServer();
